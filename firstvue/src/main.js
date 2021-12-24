@@ -5,9 +5,11 @@ import store from './store'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import request from "./axios";
+import global from './globalFun'
 Vue.prototype.$axios = request
 // main.js
 require('./mock.js');
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 

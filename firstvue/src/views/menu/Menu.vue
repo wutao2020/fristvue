@@ -2,7 +2,7 @@
     <div>
         <el-form :inline="true" :model="searchForm" class="demo-form-inline">
             <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
+                <el-button type="primary" @click="addUpdateMenuButton(0)">新增</el-button>
             </el-form-item>
         </el-form>
         <el-table
@@ -62,7 +62,7 @@
                     label="操作"
                     width="120">
                 <template slot-scope="scope">
-                    <el-button type="text" >编辑</el-button>
+                    <el-button type="text" @click="addUpdateMenuButton(scope.row.id)" >编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
                     <el-popconfirm title="确定要删除这条记录吗？" >
                         <el-button type="text" slot="reference">删除</el-button>
@@ -70,77 +70,42 @@
                 </template>
             </el-table-column>
         </el-table>
+        <AddUpdateMenu ref="addUpdateMenu" v-if="addUpdateMenuvisible" @refreshDataList="getMenuTree"></AddUpdateMenu>
     </div>
 </template>
 
 <script>
+    import AddUpdateMenu from "./AddUpdateMenu";
     export default {
         name: "Menu",
-
+        components:{
+          AddUpdateMenu,
+        },
         data() {
             return {
                 searchForm: {
                     name: ''
                 },
-                tableData: [{
-                    id: 1,
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    id: 2,
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    id: 3,
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    children: [{
-                        id: 31,
-                        date: '2016-05-01',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1519 弄'
-                    }, {
-                        id: 32,
-                        date: '2016-05-01',
-                        name: '王小虎',
-                        address: '上海市普陀区金沙江路 1519 弄'
-                    }]
-                }, {
-                    id: 4,
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }],
-                tableData1: [{
-                    id: 1,
-                    date: '2016-05-02',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1518 弄'
-                }, {
-                    id: 2,
-                    date: '2016-05-04',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                    id: 3,
-                    date: '2016-05-01',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1519 弄',
-                    hasChildren: true
-                }, {
-                    id: 4,
-                    date: '2016-05-03',
-                    name: '王小虎',
-                    address: '上海市普陀区金沙江路 1516 弄'
-                }]
+                tableData: [],
+                addUpdateMenuvisible:false,
             }
         },
+        created() {
+            this.getMenuTree();
+        },
         methods:{
-            onSubmit(){
-                console.log(1111)
+            getMenuTree() {
+                console.log("1111")
+                this.$axios.get("/menu/list").then(res => {
+                    this.tableData = res.data;
+                })
+            },
+            addUpdateMenuButton(id){
+                this.addUpdateMenuvisible=true;
+                console.log("qq",this.$refs.addUpdateMenu)
+                this.$nextTick(()=>{
+                    this.$refs.addUpdateMenu.init(id);
+                })
             }
         }
 
