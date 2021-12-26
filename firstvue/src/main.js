@@ -8,7 +8,7 @@ import request from "./axios";
 import global from './globalFun'
 Vue.prototype.$axios = request
 // main.js
-require('./mock.js');
+//require('./mock.js');
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false

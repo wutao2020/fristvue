@@ -2,7 +2,7 @@ import axios from "axios";
 import Element, {Message, MessageBox} from 'element-ui'
 import router from "./router";
 import store from "./store";
-// axios.defaults.baseURL = "http://localhost:8081"
+axios.defaults.baseURL = "http://localhost:9001"
 const request = axios.create({
     timeout: 5000,
     headers: {
@@ -21,7 +21,6 @@ request.interceptors.response.use(response => {
                 type: 'error',
                 duration: 5 * 1000
             })
-
             // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
             if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
                 MessageBox.confirm(

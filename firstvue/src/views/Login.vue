@@ -20,10 +20,9 @@
             </el-form-item>
             <el-form-item prop="code">
                 <el-input size="normal" type="text" v-model="loginForm.code" auto-complete="off"
-                          placeholder="点击图片更换验证码" @keydown.enter.native="submitLogin" style="width: 250px"></el-input>
-                <el-image :src="'data:image/png;base64,'+vcUrl" @click="updateVerifyCode"></el-image>
+                          placeholder="点击图片更换验证码" @keydown.enter.native="submitLogin" style="width: 250px;"></el-input>
+                <el-image :src="vcUrl" @click="updateVerifyCode" style="padding-left: 5px"></el-image>
             </el-form-item>
-            <el-checkbox size="normal" class="loginRemember" v-model="checked"></el-checkbox>
             <el-button size="normal" type="primary" style="width: 100%;" @click="submitLogin('loginForm')">登录</el-button>
         </el-form>
     </div>
@@ -38,11 +37,10 @@
                 vcUrl: '',
                 loginForm: {
                     username: 'admin',
-                    password: '123',
+                    password: 'admin',
                     code:'',
                     randomCode:''
                 },
-                checked: true,
                 rules: {
                     username: [{required: true, message: '请输入用户名', trigger: 'blur'}],
                     password: [{required: true, message: '请输入密码', trigger: 'blur'}],
@@ -55,17 +53,19 @@
         },
         methods: {
             updateVerifyCode() {
-                this.$axios.get('/captcha').then(res => {
-                    this.loginForm.randomCode = res.data.token
+                this.$axios.get('/admin/auth/captcha').then(res => {
+                    this.loginForm.randomCode = res.data.randomCode
                     this.vcUrl = res.data.captchaImg
                 })
             },
             submitLogin(formName) {
                 this.$refs[formName].validate((valid) => {
+                  console.log('1111',formName);
                     if (valid) {
-                        this.$axios.post('/login' + qs.stringify(this.loginForm)).then(res => {
-                            console.log(res.data)
-                            const jwt = res.headers['authorization']
+                        this.$axios.post('/login?' + qs.stringify(this.loginForm)).then(res => {
+                            console.log('qqq',res.data)
+                            const jwt = res.data.jwt;
+                          console.log('wt',jwt)
                             // 将jwt存储到应用store中
                             this.$store.commit("SET_TOKEN", jwt)
                             this.$router.push("/index")
