@@ -65,7 +65,6 @@ router.beforeEach((to, from, next) => {
   let hasRoute = store.state.menus.hasRoute
   let menus = store.state.menus.menuList
   let token = localStorage.getItem("token")
-  console.log("token222",token.length)
   if (to.path == '/login') {
     console.log("login!!!!!!!!!!!")
     next()

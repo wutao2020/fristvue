@@ -62,9 +62,11 @@
                     label="操作"
                     width="120">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="addUpdateMenuButton(scope.row.id)" >编辑</el-button>
+                    <el-button type="text" @click="addUpdateMenuButton(scope.row.id)"
+                    v-if="hasAuth('sys:menu:update')">编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
-                    <el-popconfirm title="确定要删除这条记录吗？" >
+                    <el-popconfirm title="确定要删除这条记录吗？" @confirm="delHandle(scope.row.id)"
+                                   v-if="hasAuth('sys:menu:delete')">
                         <el-button type="text" slot="reference">删除</el-button>
                     </el-popconfirm>
                 </template>
@@ -100,6 +102,20 @@
                     this.tableData = res.data;
                 })
             },
+
+          delHandle(id) {
+            this.$axios.post("/admin/menu/delete/" + id).then(res => {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，操作成功',
+                type: 'success',
+                onClose:() => {
+                  this.getMenuTree()
+                }
+              });
+
+            })
+          },
             addUpdateMenuButton(id){
                 this.addUpdateMenuvisible=true;
                 console.log("qq",this.$refs.addUpdateMenu)

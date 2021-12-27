@@ -109,7 +109,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$axios.post('/menu/' + (this.editForm.id?'update' : 'save'), this.editForm)
+                        this.$axios.post('/admin/menu/' + (this.editForm.id?'update' : 'save'), this.editForm)
                             .then(res => {
 
                                 this.$message({
@@ -129,14 +129,15 @@
             },
 
             getMenuTree() {
-                this.$axios.get("/menu/list").then(res => {
+                this.$axios.get("/admin/menu/list").then(res => {
+                  console.log('wwwtr',res.data)
                     this.tableData = res.data;
                 })
             },
             init(id) {
                 this.dialogVisible=true;
                 if (id!=null&&id!=''&&id>0){
-                    this.$axios.get('/menu/info/' + id).then(res => {
+                    this.$axios.get('admin/menu/info/' + id).then(res => {
                         this.editForm = res.data
                     })
                 }
