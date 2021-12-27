@@ -54,7 +54,7 @@
         },
         methods: {
             getUserInfo() {
-                this.$axios.get("/user/userInfo").then(res => {
+                this.$axios.post("/admin/user/userInfo").then(res => {
                     this.userInfo = res.data;
                 })
             },

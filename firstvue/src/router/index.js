@@ -65,17 +65,18 @@ router.beforeEach((to, from, next) => {
   let hasRoute = store.state.menus.hasRoute
   let menus = store.state.menus.menuList
   let token = localStorage.getItem("token")
+  console.log("token222",token.length)
   if (to.path == '/login') {
     console.log("login!!!!!!!!!!!")
     next()
-  // } else if (!token) {
-  //   console.log("还没有token！！！")
-  //   next({path: "/login"})
-  // }else if (to.path == '/' || to.path == '') {
-  //   next({path: "/index"})
+  } else if (token==undefined||token==null||token=='undefined'||token=='null'||token=='') {
+    console.log("还没有token！！！")
+    next({path: "/login"})
+  }else if (to.path == '/' || to.path == '') {
+    next({path: "/index"})
   }else if (!hasRoute) {
     let newRoutes = router.options.routes;
-    axios.get("/menu/nav", {headers:{
+    axios.get("admin/menu/nav", {headers:{
         Authorization: localStorage.getItem("token")
       }}).then(res => {
       console.log(res.data.data)

@@ -172,7 +172,7 @@
                 this.getUserList()
             },
             getUserList() {
-                this.$axios.get("/user/list", {
+                this.$axios.get("/admin/user/list", {
                     params: {
                         username: this.searchForm.username,
                         current: this.current,

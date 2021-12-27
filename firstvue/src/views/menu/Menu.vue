@@ -96,7 +96,7 @@
         methods:{
             getMenuTree() {
                 console.log("1111")
-                this.$axios.get("/menu/list").then(res => {
+                this.$axios.get("/admin/menu/list").then(res => {
                     this.tableData = res.data;
                 })
             },
