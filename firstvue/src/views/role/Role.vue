@@ -152,7 +152,7 @@
             },
 
             getRoleList() {
-                this.$axios.get("/role/list", {
+                this.$axios.get("/admin/role/list", {
                     params: {
                         name: this.searchForm.name,
                         current: this.current,

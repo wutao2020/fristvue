@@ -40,7 +40,7 @@
             }
         },
         created() {
-            this.$axios.get('/menu/list').then(res => {
+            this.$axios.get('/admin/menu/list').then(res => {
                 this.permTreeData = res.data;
             })
         },
@@ -67,7 +67,7 @@
             },
             init(id){
                 this.permDialogVisible=true;
-                this.$axios.get("/role/info/" + id).then(res => {
+                this.$axios.get("/admin/role/info/" + id).then(res => {
                     this.$refs.permTree.setCheckedKeys(res.data.menuIds)
                     this.permForm = res.data
                 })

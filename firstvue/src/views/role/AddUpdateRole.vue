@@ -93,7 +93,7 @@
             init(id){
                 this.dialogVisible=true;
                 if (id!=null&&id!=''&&id>0){
-                    this.$axios.get('/role/info/' + id).then(res => {
+                    this.$axios.get('/admin/role/info/' + id).then(res => {
                         this.editForm = res.data
                     })
                 }
