@@ -15,11 +15,11 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="addUpdateRoleButton(0)">新增</el-button>
+                <el-button type="primary" @click="addUpdateRoleButton(0)" v-if="hasAuth('sys:role:save')">新增</el-button>
             </el-form-item>
             <el-form-item>
                 <el-popconfirm title="这是确定批量删除吗？" @confirm="delHandle(null)">
-                    <el-button type="danger" slot="reference" :disabled="delBtlStatu">批量删除</el-button>
+                    <el-button type="danger" slot="reference" :disabled="delBtlStatu" v-if="hasAuth('sys:role:delete')">批量删除</el-button>
                 </el-popconfirm>
             </el-form-item>
         </el-form>
@@ -68,13 +68,13 @@
                     label="操作">
 
                 <template slot-scope="scope">
-                    <el-button type="text" @click="permHandle(scope.row.id)">分配权限</el-button>
+                    <el-button type="text" @click="permHandle(scope.row.id)" v-if="hasAuth('sys:role:perm')">分配权限</el-button>
                     <el-divider direction="vertical"></el-divider>
 
-                    <el-button type="text" @click="addUpdateRoleButton(scope.row.id)">编辑</el-button>
+                    <el-button type="text" @click="addUpdateRoleButton(scope.row.id)" v-if="hasAuth('sys:role:update')">编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
 
-                    <template>
+                    <template v-if="hasAuth('sys:role:delete')">
                         <el-popconfirm title="这是一段内容确定删除吗？" @confirm="delHandle(scope.row.id)">
                             <el-button type="text" slot="reference">删除</el-button>
                         </el-popconfirm>
@@ -188,7 +188,7 @@
                 }
                 console.log(ids)
 
-                this.$axios.post("/sys/role/delete", ids).then(res => {
+                this.$axios.post("/admin/role/delete", ids).then(res => {
                     this.$message({
                         showClose: true,
                         message: '恭喜你，操作成功',
@@ -204,8 +204,5 @@
 </script>
 
 <style scoped>
-    .el-pagination{
-        float: right;
-        margin-top: 22px;
-    }
+
 </style>

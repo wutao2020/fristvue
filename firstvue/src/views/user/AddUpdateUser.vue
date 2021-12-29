@@ -23,6 +23,10 @@
             <el-form-item label="手机号"  prop="phone" label-width="100px">
                 <el-input v-model="editForm.phone" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="头像" prop="avatar" label-width="100px">
+                <VploadImg :profile-url="avatar"  @getShopProfileFn="getShopProfile" ></VploadImg>
+
+            </el-form-item>
 
             <el-form-item label="状态"  prop="statu" label-width="100px">
                 <el-radio-group v-model="editForm.statu">
@@ -40,11 +44,16 @@
 </template>
 
 <script>
+    import VploadImg from "../inc/VploadImg";
     export default {
         name: "AddUpdateUser",
+        components:{
+          VploadImg
+        },
         data(){
             return{
                 editForm:{},
+                avatar:'',
                 dialogVisible:false,
                 editFormRules: {
                     username: [
@@ -71,7 +80,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$axios.post('/user/' + (this.editForm.id?'update' : 'save'), this.editForm)
+                        this.$axios.post('/admin/user/' + (this.editForm.id?'update' : 'save'), this.editForm)
                             .then(res => {
 
                                 this.$message({
@@ -91,11 +100,41 @@
                     }
                 });
             },
+            getShopProfile(url) {
+                //  url
+                console.log("www",url)
+            },
+            // 上传成功回调
+            handleAvatarSuccess(res, file) {
+                // console.log(res)
+                this.editForm.avatar = res.data.filePath
+                // 强制重新渲染
+                this.$forceUpdate()
+            },
+            //文件删除时执行的的钩子
+            onRemove(file,fileList){
+                this.editForm.avatar=''
+            },
+            // 上传校验
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg'
+                const isLt2M = file.size / 1024 / 1024 < 2
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!')
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!')
+                }
+                return isJPG && isLt2M
+            },
             init(id){
                 this.dialogVisible=true;
                 if (id!=null&&id!=''&&id>0){
-                    this.$axios.get('/user/info/' + id).then(res => {
+                    this.$axios.get('/admin/user/info/' + id).then(res => {
                         this.editForm = res.data
+                        this.avatar=res.data.avatar;
+                        console.log(this.editForm)
                     })
                 }
             },
@@ -104,5 +143,27 @@
 </script>
 
 <style scoped>
-
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
+        border-radius: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    .avatar-uploader .el-upload:hover {
+        border-color: #409EFF;
+    }
+    .avatar-uploader-icon {
+        font-size: 28px;
+        color: #8c939d;
+        width: 178px;
+        height: 178px;
+        line-height: 178px;
+        text-align: center;
+    }
+    .avatar {
+        width: 178px;
+        height: 178px;
+        display: block;
+    }
 </style>

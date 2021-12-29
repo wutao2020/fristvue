@@ -39,15 +39,18 @@
             }
         },
         created() {
-            this.$axios.get("/role/list").then(res => {
+            this.$axios.get("admin/role/list").then(res => {
                 this.roleTreeData = res.data.records
             })
         },
         methods:{
             submitRoleHandle(formName) {
-                var menuIds = this.$refs.roleTree.getCheckedKeys()
-                console.log(menuIds)
-                this.$axios.post('/role/perm/' + this.roleForm.id, menuIds).then(res => {
+                var roleIds = this.$refs.roleTree.getCheckedKeys()
+                var  data={
+                    userId:this.roleForm.id,
+                    roleIds:roleIds
+                }
+                this.$axios.post('/admin/user/rolePerm',data ).then(res => {
                     this.$message({
                         showClose: true,
                         message: '恭喜你，操作成功',
@@ -66,10 +69,11 @@
             },
             init(id){
                 this.roleDialogFormVisible = true
-                this.$axios.get('/user/info/' + id).then(res => {
+                this.$axios.get('/admin/user/info/' + id).then(res => {
                     this.roleForm = res.data
+                    console.log(res.data)
                     let roleIds = []
-                    res.data.roles.forEach(row => {
+                    res.data.sysRoles.forEach(row => {
                         roleIds.push(row.id)
                     })
                     this.$refs.roleTree.setCheckedKeys(roleIds)

@@ -48,7 +48,11 @@
             submitPermFormHandle(formName) {
                 var menuIds = this.$refs.permTree.getCheckedKeys()
                 console.log(menuIds)
-                this.$axios.post('/role/perm/' + this.permForm.id, menuIds).then(res => {
+                var data={
+                    roleId:this.permForm.id(),
+                    menuIds:menuIds
+                }
+                this.$axios.post('/admin/role/perm',data).then(res => {
                     this.$message({
                         showClose: true,
                         message: '恭喜你，操作成功',

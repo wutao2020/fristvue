@@ -31,4 +31,8 @@
   a{
     text-decoration:none;
   }
+  .el-pagination{
+    float: right;
+    margin-top: 22px;
+  }
 </style>

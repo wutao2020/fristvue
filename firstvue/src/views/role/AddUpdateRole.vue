@@ -70,7 +70,7 @@
             submitForm(formName) {
                 this.$refs[formName].validate((valid) => {
                     if (valid) {
-                        this.$axios.post('/role/' + (this.editForm.id?'update' : 'save'), this.editForm)
+                        this.$axios.post('/admin/role/' + (this.editForm.id?'update' : 'save'), this.editForm)
                             .then(res => {
 
                                 this.$message({

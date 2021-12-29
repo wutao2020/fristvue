@@ -15,11 +15,11 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary" @click="addUpdateUserButton(null)" v-if="hasAuth('SysUser:save')">新增</el-button>
+                <el-button type="primary" @click="addUpdateUserButton(null)" v-if="hasAuth('sys:user:save')">新增</el-button>
             </el-form-item>
             <el-form-item>
                 <el-popconfirm title="这是确定批量删除吗？" @confirm="delHandle(null)">
-                    <el-button type="danger" slot="reference" :disabled="delBtlStatu" v-if="hasAuth('SysUser:del')">批量删除</el-button>
+                    <el-button type="danger" slot="reference" :disabled="delBtlStatu" v-if="hasAuth('sys:user:delete')">批量删除</el-button>
                 </el-popconfirm>
             </el-form-item>
         </el-form>
@@ -88,16 +88,16 @@
                     width="260px"
                     label="操作">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="roleHandle(scope.row.id)">分配角色</el-button>
+                    <el-button type="text" @click="roleHandle(scope.row.id)" v-if="hasAuth('sys:user:role')">分配角色</el-button>
                     <el-divider direction="vertical"></el-divider>
 
-                    <el-button type="text" @click="repassHandle(scope.row.id, scope.row.username)">重置密码</el-button>
+                    <el-button type="text" @click="repassHandle(scope.row.id, scope.row.username)"  v-if="hasAuth('sys:user:repass')">重置密码</el-button>
                     <el-divider direction="vertical"></el-divider>
 
-                    <el-button type="text" @click="addUpdateUserButton(scope.row.id)">编辑</el-button>
+                    <el-button type="text" @click="addUpdateUserButton(scope.row.id)" v-if="hasAuth('sys:user:update')">编辑</el-button>
                     <el-divider direction="vertical"></el-divider>
 
-                    <template>
+                    <template v-if="hasAuth('sys:user:delete')">
                         <el-popconfirm title="这是一段内容确定删除吗？" @confirm="delHandle(scope.row.id)">
                             <el-button type="text" slot="reference">删除</el-button>
                         </el-popconfirm>
@@ -199,7 +199,7 @@
 
                 console.log(ids)
 
-                this.$axios.post("/user/delete", ids).then(res => {
+                this.$axios.post("/admin/user/delete", ids).then(res => {
                     this.$message({
                         showClose: true,
                         message: '恭喜你，操作成功',
@@ -217,7 +217,7 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    this.$axios.post("/user/repass", id).then(res => {
+                    this.$axios.post("/admin/user/repass", id).then(res => {
                         this.$message({
                             showClose: true,
                             message: '恭喜你，操作成功',
