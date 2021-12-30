@@ -2,6 +2,8 @@
     <div>
         <el-form :inline="true" :model="searchForm" class="demo-form-inline">
             <el-form-item>
+                <el-button v-if="open" type="success" style="margin-bottom:10px;" @click="Toexpandall">全部展开</el-button>
+                <el-button v-if="close" type="danger" style="margin-bottom:10px;" @click="ToClose">全部收起</el-button>
                 <el-button type="primary" @click="addUpdateMenuButton(0)">新增</el-button>
             </el-form-item>
         </el-form>
@@ -11,7 +13,8 @@
                 row-key="id"
                 border
                 stripe
-                default-expand-all
+                ref="tabletree"
+                :default-expand-all="false"
                 :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
             <el-table-column
                     prop="name"
@@ -25,7 +28,10 @@
             </el-table-column>
             <el-table-column
                     prop="icon"
-                    label="图标">
+                    label="图标" width="80">
+                <template slot-scope="scope">
+                    <i :class="scope.row.icon"></i>
+                </template>
             </el-table-column>
             <el-table-column
                     prop="type"
@@ -39,15 +45,15 @@
             </el-table-column>
             <el-table-column
                     prop="path"
-                    label="菜单URL">
+                    label="菜单URL" width="120">
             </el-table-column>
             <el-table-column
                     prop="component"
-                    label="菜单组件">
+                    label="菜单组件" width="150">
             </el-table-column>
             <el-table-column
                     prop="orderNum"
-                    label="排序号">
+                    label="排序号" width="80">
             </el-table-column>
             <el-table-column
                     prop="statu"
@@ -60,14 +66,13 @@
             </el-table-column>
             <el-table-column
                     label="操作"
-                    width="120">
+                    width="240">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="addUpdateMenuButton(scope.row.id)"
+                    <el-button type="primary" plain  @click="addUpdateMenuButton(scope.row.id)"
                     v-if="hasAuth('sys:menu:update')">编辑</el-button>
-                    <el-divider direction="vertical"></el-divider>
                     <el-popconfirm title="确定要删除这条记录吗？" @confirm="delHandle(scope.row.id)"
                                    v-if="hasAuth('sys:menu:delete')">
-                        <el-button type="text" slot="reference">删除</el-button>
+                        <el-button type="danger"  slot="reference">删除</el-button>
                     </el-popconfirm>
                 </template>
             </el-table-column>
@@ -85,6 +90,8 @@
         },
         data() {
             return {
+                open: true,
+                close:false,
                 searchForm: {
                     name: ''
                 },
@@ -122,12 +129,55 @@
                 this.$nextTick(()=>{
                     this.$refs.addUpdateMenu.init(id);
                 })
+            },
+            // 全部展开
+            Toexpandall() {
+                let els = document.getElementsByClassName('el-table__expand-icon')
+                if(this.tableData.length !=0 && els.length != 0){
+                    this.open = false
+                    this.close = true
+                    for(let j1=0;j1<els.length;j1++){
+                        els[j1].classList.add("dafult")
+                    }
+                    if(this.$el.getElementsByClassName('el-table__expand-icon--expanded')){
+                        const open = this.$el.getElementsByClassName('el-table__expand-icon--expanded')
+                        for(let j=0;j<open.length;j++){
+                            open[j].classList.remove("dafult")
+                            // open[j].classList.remove("el-table__expand-icon--expanded")
+                            // open[j].click(function(event) {
+                            //   event.preventDefault();
+                            // })
+                        }
+                        const dafult = this.$el.getElementsByClassName('dafult')
+                        for(let a=0;a<dafult.length;a++){
+                            dafult[a].click()
+                        }
+                    }
+                }
+            },
+            // 全部收起
+            ToClose() {
+                if(this.tableData.length !=0){
+                    this.open = true
+                    this.close = false
+                    const elsopen = this.$el.getElementsByClassName('el-table__expand-icon--expanded')
+                    if(this.$el.getElementsByClassName('el-table__expand-icon--expanded')){
+                        for(let i=0;i<elsopen.length;i++){
+                            elsopen[i].click()
+                        }
+                    }
+                }
             }
         }
-
     }
 </script>
 
 <style scoped>
-
+.el-button{
+    padding: 0 10px;
+    height: 30px;
+    line-height:30px;
+    font-size:12px;
+    margin-right: 10px;
+}
 </style>

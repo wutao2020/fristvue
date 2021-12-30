@@ -35,27 +35,35 @@
 
             <el-table-column
                     type="selection"
+                    align="center"
+                    fixed="left"
                     width="55">
             </el-table-column>
 
             <el-table-column
                     prop="name"
                     label="名称"
+                    align="center"
                     width="120">
             </el-table-column>
             <el-table-column
                     prop="code"
                     label="唯一编码"
+                    width="100"
+                    align="center"
                     show-overflow-tooltip>
             </el-table-column>
             <el-table-column
                     prop="remark"
                     label="描述"
+                    align="center"
                     show-overflow-tooltip>
             </el-table-column>
 
             <el-table-column
                     prop="statu"
+                    width="80"
+                    align="center"
                     label="状态">
                 <template slot-scope="scope">
                     <el-tag size="small" v-if="scope.row.statu === 1" type="success">正常</el-tag>
@@ -65,18 +73,21 @@
             </el-table-column>
             <el-table-column
                     prop="icon"
+                    width="250"
+                    align="center"
+                    fixed="right"
                     label="操作">
 
                 <template slot-scope="scope">
-                    <el-button type="text" @click="permHandle(scope.row.id)" v-if="hasAuth('sys:role:perm')">分配权限</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-button type="success" plain @click="permHandle(scope.row.id)" v-if="hasAuth('sys:role:perm')">分配权限</el-button>
 
-                    <el-button type="text" @click="addUpdateRoleButton(scope.row.id)" v-if="hasAuth('sys:role:update')">编辑</el-button>
-                    <el-divider direction="vertical"></el-divider>
+
+                    <el-button type="primary" plain @click="addUpdateRoleButton(scope.row.id)" v-if="hasAuth('sys:role:update')">编辑</el-button>
+
 
                     <template v-if="hasAuth('sys:role:delete')">
                         <el-popconfirm title="这是一段内容确定删除吗？" @confirm="delHandle(scope.row.id)">
-                            <el-button type="text" slot="reference">删除</el-button>
+                            <el-button type="danger" plain slot="reference">删除</el-button>
                         </el-popconfirm>
                     </template>
 
@@ -204,5 +215,11 @@
 </script>
 
 <style scoped>
-
+    .el-button{
+        padding: 0 10px;
+        height: 30px;
+        line-height:30px;
+        font-size:12px;
+        margin-right: 10px;
+    }
 </style>

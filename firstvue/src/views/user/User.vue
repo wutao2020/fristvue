@@ -88,18 +88,16 @@
                     width="260px"
                     label="操作">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="roleHandle(scope.row.id)" v-if="hasAuth('sys:user:role')">分配角色</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-button type="success" plain @click="roleHandle(scope.row.id)" v-if="hasAuth('sys:user:role')">分配角色</el-button>
 
-                    <el-button type="text" @click="repassHandle(scope.row.id, scope.row.username)"  v-if="hasAuth('sys:user:repass')">重置密码</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-button type="warning" plain @click="repassHandle(scope.row.id, scope.row.username)"  v-if="hasAuth('sys:user:repass')">重置密码</el-button>
 
-                    <el-button type="text" @click="addUpdateUserButton(scope.row.id)" v-if="hasAuth('sys:user:update')">编辑</el-button>
-                    <el-divider direction="vertical"></el-divider>
+                    <el-button type="primary" plain @click="addUpdateUserButton(scope.row.id)" v-if="hasAuth('sys:user:update')">编辑</el-button>
+
 
                     <template v-if="hasAuth('sys:user:delete')">
                         <el-popconfirm title="这是一段内容确定删除吗？" @confirm="delHandle(scope.row.id)">
-                            <el-button type="text" slot="reference">删除</el-button>
+                            <el-button type="danger" plain slot="reference">删除</el-button>
                         </el-popconfirm>
                     </template>
 
@@ -245,5 +243,11 @@
 </script>
 
 <style scoped>
-
+    .el-button{
+        padding: 0 10px;
+        height: 30px;
+        line-height:30px;
+        font-size:12px;
+        margin-right: 10px;
+    }
 </style>

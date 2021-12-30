@@ -1,7 +1,7 @@
 <template>
     <!--新增对话框-->
     <el-dialog
-            title="提示"
+            :title="editForm.id?'编辑用户':'新增用户'"
             :visible.sync="dialogVisible"
             width="600px"
             :before-close="handleClose">
@@ -21,10 +21,10 @@
                 <el-input v-model="editForm.email" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="手机号"  prop="phone" label-width="100px">
-                <el-input v-model="editForm.phone" autocomplete="off"></el-input>
+                <el-input v-model="editForm.phone"  autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="头像" prop="avatar" label-width="100px">
-                <VploadImg :profile-url="avatar"  @getShopProfileFn="getShopProfile" ></VploadImg>
+                <VploadImg :limit="1" v-bind:file-list="fileList" :file-type="1"   @submitImg="getImgList" ></VploadImg>
 
             </el-form-item>
 
@@ -54,6 +54,7 @@
             return{
                 editForm:{},
                 avatar:'',
+                fileList:[],
                 dialogVisible:false,
                 editFormRules: {
                     username: [
@@ -73,6 +74,7 @@
                 this.$refs[formName].resetFields();
                 this.dialogVisible = false
                 this.editForm = {}
+                this.fileList=[];
             },
             handleClose() {
                 this.resetForm('editForm')
@@ -100,41 +102,18 @@
                     }
                 });
             },
-            getShopProfile(url) {
+            getImgList(url) {
                 //  url
                 console.log("www",url)
-            },
-            // 上传成功回调
-            handleAvatarSuccess(res, file) {
-                // console.log(res)
-                this.editForm.avatar = res.data.filePath
-                // 强制重新渲染
-                this.$forceUpdate()
-            },
-            //文件删除时执行的的钩子
-            onRemove(file,fileList){
-                this.editForm.avatar=''
-            },
-            // 上传校验
-            beforeAvatarUpload(file) {
-                const isJPG = file.type === 'image/jpeg'
-                const isLt2M = file.size / 1024 / 1024 < 2
-
-                if (!isJPG) {
-                    this.$message.error('上传头像图片只能是 JPG 格式!')
-                }
-                if (!isLt2M) {
-                    this.$message.error('上传头像图片大小不能超过 2MB!')
-                }
-                return isJPG && isLt2M
+                this.editForm.avatar=url
             },
             init(id){
                 this.dialogVisible=true;
                 if (id!=null&&id!=''&&id>0){
                     this.$axios.get('/admin/user/info/' + id).then(res => {
                         this.editForm = res.data
-                        this.avatar=res.data.avatar;
-                        console.log(this.editForm)
+                        var filess={url:res.data.avatar}
+                        this.fileList.push(filess)
                     })
                 }
             },

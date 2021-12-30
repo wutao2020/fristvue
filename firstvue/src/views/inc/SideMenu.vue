@@ -21,7 +21,7 @@
             <router-link :to="item.path" v-for="item in menu.children">
                 <el-menu-item :index="item.name" @click="selectMenu(item)">
                     <template slot="title">
-                        <i :class="item.title"></i>
+                        <i :class="item.icon"></i>
                         <span slot="title">{{item.title}}</span>
                     </template>
                 </el-menu-item>
@@ -45,7 +45,7 @@
         },
         methods:{
             selectMenu(item) {
-                console.log(item)
+                console.log('2222',item)
                 let obj = {
                     name: item.name,
                     title: item.title

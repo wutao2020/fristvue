@@ -31,7 +31,7 @@
             </el-form-item>
 
             <el-form-item label="图标" prop="icon" label-width="100px">
-                <el-input v-model="editForm.icon" autocomplete="off"></el-input>
+                <e-icon-picker v-model="editForm.icon" />
             </el-form-item>
             <el-form-item label="菜单URL" prop="path" label-width="100px">
                 <el-input v-model="editForm.path" autocomplete="off"></el-input>
@@ -71,14 +71,13 @@
 </template>
 
 <script>
+
     export default {
         name: "AddUpdateMenu",
         data(){
             return{
                 dialogVisible: false,
-                editForm: {
-
-                },
+                editForm: {},
                 tableData: [],
                 editFormRules: {
                     parentId: [
@@ -104,6 +103,7 @@
         },
         created() {
             this.getMenuTree();
+            console.log(this.el)
         },
         methods:{
             submitForm(formName) {
@@ -155,5 +155,7 @@
 </script>
 
 <style scoped>
-
+    @import '~e-icon-picker/lib/index.css';
+    @import '~font-awesome/css/font-awesome.min.css';
+    @import '~element-ui/lib/theme-chalk/icon.css';
 </style>
