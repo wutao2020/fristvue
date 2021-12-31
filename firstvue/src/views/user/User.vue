@@ -34,12 +34,15 @@
                 @selection-change="handleSelectionChange">
 
             <el-table-column
+                    align="center"
+                    fixed="left"
                     type="selection"
                     width="55">
             </el-table-column>
 
             <el-table-column
                     label="头像"
+                    align="center"
                     width="50">
                 <template slot-scope="scope">
                     <el-avatar size="small" :src="scope.row.avatar"></el-avatar>
@@ -48,11 +51,14 @@
 
             <el-table-column
                     prop="username"
+                    align="center"
                     label="用户名"
                     width="120">
             </el-table-column>
             <el-table-column
                     prop="code"
+                    align="center"
+                    width="200"
                     label="角色名称">
                 <template slot-scope="scope">
                     <el-tag size="small" type="info" v-for="item in scope.row.sysRoles">{{item.name}}</el-tag>
@@ -60,16 +66,22 @@
 
             </el-table-column>
             <el-table-column
+                    align="center"
+                    width="200"
                     prop="email"
                     label="邮箱">
             </el-table-column>
             <el-table-column
+                    align="center"
+                    width="200"
                     prop="phone"
                     label="手机号">
             </el-table-column>
 
             <el-table-column
                     prop="statu"
+                    align="center"
+                    width="80"
                     label="状态">
                 <template slot-scope="scope">
                     <el-tag size="small" v-if="scope.row.statu === 1" type="success">正常</el-tag>
@@ -79,13 +91,16 @@
             </el-table-column>
             <el-table-column
                     prop="created"
+                    align="center"
                     width="200"
                     label="创建时间"
             >
             </el-table-column>
             <el-table-column
                     prop="icon"
-                    width="260px"
+                    align="center"
+
+                    width="350px"
                     label="操作">
                 <template slot-scope="scope">
                     <el-button type="success" plain @click="roleHandle(scope.row.id)" v-if="hasAuth('sys:user:role')">分配角色</el-button>

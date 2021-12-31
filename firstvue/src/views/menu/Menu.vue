@@ -19,15 +19,18 @@
             <el-table-column
                     prop="name"
                     label="名称"
+                    align="center"
                     width="180">
             </el-table-column>
             <el-table-column
                     prop="perms"
                     label="权限编码"
+                    align="center"
                     width="180">
             </el-table-column>
             <el-table-column
                     prop="icon"
+                    align="center"
                     label="图标" width="80">
                 <template slot-scope="scope">
                     <i :class="scope.row.icon"></i>
@@ -36,6 +39,7 @@
             <el-table-column
                     prop="type"
                     label="类型"
+                    align="center"
                     width="120">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.type === 0" size="small">目录</el-tag>
@@ -45,19 +49,23 @@
             </el-table-column>
             <el-table-column
                     prop="path"
+                    align="center"
                     label="菜单URL" width="120">
             </el-table-column>
             <el-table-column
                     prop="component"
+                    align="center"
                     label="菜单组件" width="150">
             </el-table-column>
             <el-table-column
+                    align="center"
                     prop="orderNum"
                     label="排序号" width="80">
             </el-table-column>
             <el-table-column
                     prop="statu"
                     label="状态"
+                    align="center"
                     width="120">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.statu === 0" size="small" type="danger">禁用</el-tag>
@@ -66,6 +74,7 @@
             </el-table-column>
             <el-table-column
                     label="操作"
+                    align="center"
                     width="240">
                 <template slot-scope="scope">
                     <el-button type="primary" plain  @click="addUpdateMenuButton(scope.row.id)"

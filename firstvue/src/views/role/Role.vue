@@ -75,7 +75,6 @@
                     prop="icon"
                     width="250"
                     align="center"
-                    fixed="right"
                     label="操作">
 
                 <template slot-scope="scope">
