@@ -49,7 +49,7 @@
                 var menuIds = this.$refs.permTree.getCheckedKeys()
                 console.log(menuIds)
                 var data={
-                    roleId:this.permForm.id(),
+                    roleId:this.permForm.id,
                     menuIds:menuIds
                 }
                 this.$axios.post('/admin/role/perm',data).then(res => {

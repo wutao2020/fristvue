@@ -27,27 +27,6 @@ const routes = [
         name: 'UserCenter',
         component: UserCenter
       },
-      // {
-      //   path: '/user/users',
-      //   name: 'Users',
-      //   component: User
-      // },
-      //
-      // {
-      //   path: '/role/roles',
-      //   name: 'Roles',
-      //   component: Role
-      // },
-      // {
-      //   path: '/menu/menus',
-      //   name: 'Menus',
-      //   component: Menu
-      // },
-      // {
-      //   path: '/dict/dicts',
-      //   name: 'Dicts',
-      //   component: Dict
-      // },
     ]
   },
 
@@ -66,10 +45,8 @@ router.beforeEach((to, from, next) => {
   let menus = store.state.menus.menuList
   let token = localStorage.getItem("token")
   if (to.path == '/login') {
-    console.log("login!!!!!!!!!!!")
     next()
   } else if (token==undefined||token==null||token=='undefined'||token=='null'||token=='') {
-    console.log("还没有token！！！")
     next({path: "/login"})
   }else if (to.path == '/' || to.path == '') {
     next({path: "/index"})
@@ -78,7 +55,7 @@ router.beforeEach((to, from, next) => {
     axios.get("admin/menu/nav", {headers:{
         Authorization: localStorage.getItem("token")
       }}).then(res => {
-      console.log(res.data.data)
+      console.log("eeee",res.data.data)
       store.commit("setMenuList", res.data.data.nav)
       store.commit("setPermList", res.data.data.authoritys)
       res.data.data.nav.forEach(menu => {
@@ -96,15 +73,17 @@ router.beforeEach((to, from, next) => {
       router.addRoutes(newRoutes)
       store.commit("changeRouteStatus", true)
       next({path: to.path})
+    }).catch(reason => {
+      localStorage.clear()
+      sessionStorage.clear()
+      this.$store.commit("resetState")
+      this.$router.push("/login")
     })
   } else {
-    console.log("已经有路由了------------")
     next()
   }
 })
 const menuToRoute = (menu) => {
-  console.log("正在添加menu--》")
-  console.log(menu)
   if (!menu.component) {
     return null
   }
