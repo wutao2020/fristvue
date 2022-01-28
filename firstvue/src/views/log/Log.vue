@@ -16,7 +16,7 @@
                 </el-date-picker>
             </el-form-item>
             <el-form-item label="日志来源" label-width="100px">
-                <el-select v-model="searchForm.isManage" placeholder="请选择日志来源">
+                <el-select v-model="searchForm.isManage" clearable   placeholder="请选择日志来源">
                     <el-option
                             v-for="item in isManageList"
                             :key="item.value"
@@ -27,7 +27,7 @@
             </el-form-item>
 
             <el-form-item>
-                <el-button @click="getUserList">搜索</el-button>
+                <el-button @click="getlogList">搜索</el-button>
             </el-form-item>
 
 <!--            <el-form-item>-->
@@ -114,6 +114,12 @@
                     <el-tag size="small" v-else-if="scope.row.isManage === 1" type="danger">管理端</el-tag>
                 </template>
             </el-table-column>
+            <el-table-column
+                    align="center"
+                    width="200"
+                    label="路径"
+                    prop="operUri"
+            ></el-table-column>
 <!--            <el-table-column-->
 <!--                    prop="icon"-->
 <!--                    align="center"-->
@@ -207,7 +213,9 @@
             getlogList() {
                 this.$axios.get("/admin/logs/list", {
                     params: {
-                        username: this.searchForm.username,
+                        operUserName: this.searchForm.operUserName,
+                        createTime:this.searchForm.createTime,
+                        isManage:this.searchForm.isManage,
                         current: this.current,
                         size: this.size
                     }
