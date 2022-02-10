@@ -34,7 +34,17 @@
                     <el-radio :label="1">正常</el-radio>
                 </el-radio-group>
             </el-form-item>
-
+            <el-form-item label="详细地址"  prop="address" label-width="100px">
+                <el-input v-model="editForm.address" autocomplete="off">
+                    <el-button slot="append" icon="el-icon-location-outline" @click="addrHand()"></el-button>
+                </el-input>
+            </el-form-item>
+            <el-form-item label="经度"  prop="longitude" label-width="100px">
+                <el-input v-model="editForm.longitude" :disabled="true"  autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="维度"  prop="latitude" label-width="100px">
+                <el-input v-model="editForm.latitude"  :disabled="true" autocomplete="off"></el-input>
+            </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="resetForm('editForm')">取 消</el-button>
@@ -45,6 +55,7 @@
 
 <script>
     import VploadImg from "../inc/VploadImg";
+    import md5 from 'js-md5';
     export default {
         name: "AddUpdateUser",
         components:{
@@ -104,7 +115,7 @@
             },
             getImgList(url) {
                 //  url
-                console.log("www",url)
+
                 this.editForm.avatar=url
             },
             init(id){
@@ -112,11 +123,60 @@
                 if (id!=null&&id!=''&&id>0){
                     this.$axios.get('/admin/user/info/' + id).then(res => {
                         this.editForm = res.data
+                        this.editForm.address="安徽省合肥市蜀山区华地润园"
                         var filess={url:res.data.avatar}
                         this.fileList.push(filess)
                     })
                 }
             },
+            dd(){
+                console.log("dddddd")
+            },
+            //input失焦获取填写地址
+            addrHand () {
+                if (this.editForm.address==''||this.editForm.address==null||this.editForm.address==undefined){
+                    this.$message({
+                        message: '请先填写详细地址',
+                        type: 'error'
+                    })
+                }
+                var that = this
+                var address="address="+this.editForm.address
+                var cc="/ws/geocoder/v1?"+address+"&callback=QQmap&key=GSHBZ-I723W-FXKRN-OU4R4-RBERV-V4B4Q&output=jsonpIKSygovT9bwmR3Hh8qfembCcN6gZn0P";
+                var dss=md5(cc)
+                $.ajax({
+                    type: "get",
+                    dataType: 'jsonp',
+                    cache:true,
+                    data: {
+                        address: this.editForm.address, //具体的地址
+                        key: "GSHBZ-I723W-FXKRN-OU4R4-RBERV-V4B4Q", // 填申请到的腾讯keyw
+                        output: 'jsonp', //返回格式：支持JSON/JSONP，默认JSON
+                        sig:dss,
+                    },
+                    jsonp: "callback",
+                    jsonpCallback: "QQmap",
+                    url: "https://apis.map.qq.com/ws/geocoder/v1?",
+                    success: function (json) {
+                        console.log(json)
+                        if (json.status == 0) {
+                            that.editForm.latitude = json.result.location.lat; //维度
+                            that.editForm.longitude = json.result.location.lng;  //经度
+                            that.$forceUpdate();
+                            that.$message({
+                                message: '成功获取位置的经纬度',
+                                type: 'success'
+                            })
+                        } else {
+                            that.$message.error('获取该位置经纬度失败,请填写详细地址，包括省市区街道')
+                        }
+                    },
+                    error: function (err) {
+                        that.$message.error('异常错误，请刷新浏览器后重试')
+                    }
+                })
+            },
+
         }
     }
 </script>

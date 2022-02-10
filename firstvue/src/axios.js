@@ -2,7 +2,7 @@ import axios from "axios";
 import Element, {Message, MessageBox} from 'element-ui'
 import router from "./router";
 import store from "./store";
-axios.defaults.baseURL = "http://localhost:9001"
+axios.defaults.baseURL = "http://120.26.161.185:9002"
 const request = axios.create({
     timeout: 5000,
     headers: {
@@ -14,6 +14,7 @@ request.interceptors.request.use(config => {
     return config
 })
 request.interceptors.response.use(response => {
+        console.log('wwwwwwwww',response)
         const res = response.data
     console.log('wwwww',res)
         if (res.code !== 200) {
